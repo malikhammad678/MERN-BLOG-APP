@@ -9,21 +9,20 @@ import ListBlog from './pages/admin/ListBlog'
 import Comment from './pages/admin/Comment'
 import Login from './components/admin/Login'
 
+import 'quill/dist/quill.snow.css' 
+
 const App = () => {
   return (
     <>
     <Routes>
       <Route path='/' element={ <Home /> } />
       <Route path='/blog/:_id' element={ <Blog /> } />
-
       <Route path='/admin' element={ true ? <Layout /> : <Login /> }>
         <Route index  element={ <Dashboard /> } />
         <Route path='add-blog' element={ <AddBlog /> } />
         <Route path='list-blog' element={ <ListBlog /> } />
         <Route path='comments' element={ <Comment /> } />
       </Route>
-
-
       </Routes>  
     </>
   )
