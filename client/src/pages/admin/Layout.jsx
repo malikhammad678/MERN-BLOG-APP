@@ -1,12 +1,18 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import { assets } from "../../assets/assets"
 import SideBar from "../../components/admin/SideBar"
+import { useAppContext } from "../../context/AppContext"
+import toast from "react-hot-toast"
 
 const Layout = () => {
-    const navigate = useNavigate()
+  
+  const { navigate, setToken,axios } = useAppContext()
 
     const logout = () => {
-        navigate("/")
+        setToken(null)
+        localStorage.removeItem('token')
+        axios.defaults.headers.common['Authorization'] = ''
+        toast.success('Logged out successfuly!')
     }
 
   return (

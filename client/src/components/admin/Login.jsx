@@ -1,14 +1,30 @@
 import { useState } from "react"
+import toast from "react-hot-toast"
+import { useAppContext } from "../../context/AppContext"
 
 const Login = () => {
-
 
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
 
+    const { token,setToken, axios } = useAppContext()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        try {
+          const { data } = await axios.post("/api/admin/login/", { email, password })
+          if(data.success){
+            setToken(data.token)
+            localStorage.setItem('token', data.token)
+            axios.defaults.headers.common['Authorization'] = `${data.token}`
+            toast.success(data.message)
+          } else {
+            toast.error(data.message || 'Error occured!')
+          }
+        } catch (error) {
+          console.log(error)
+          toast.error(error.response?.data?.message || 'Error Occured!')
+        }
     }
 
   return (

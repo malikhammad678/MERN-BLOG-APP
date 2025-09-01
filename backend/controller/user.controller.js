@@ -12,7 +12,7 @@ export const login = async (req,res) => {
             return res.json({ success:false, message:"Invalid Credentials!" })
         }
         const token = jwt.sign({ email }, process.env.SECRET_KEY)
-        res.json({ success:true, token })
+        res.json({ success:true, token, message:"Logged In Successfuly!" })
     } catch (error) {
          res.json({ success:false, message:error.message })
     }
