@@ -1,14 +1,27 @@
 import { useEffect, useState } from "react"
 import { comments_data } from "../../assets/assets"
 import CommenttableItem from "./CommenttableItem"
+import { useAppContext } from "../../context/AppContext"
 
 const Comment = () => {
+
+  const { axios } = useAppContext()
 
   const [comments,setComments] = useState([])
   const [filter,setFilter] = useState('Not Approved')
 
-  const fetchComments = () => {
-    setComments(comments_data)
+  const fetchComments =async () => {
+    try {
+      const { data } = await axios.get("/api/admin/comments")
+      console.log(`comment is here ${data.comments}`)
+      if(data.success){
+        setComments(data.comments)
+      } else {
+               toast.error(data.message)
+      }
+    } catch (error) {
+             toast.error(error.response?.data?.message || 'Error occured!')
+    }
   }
 
   useEffect(() =>{
@@ -24,7 +37,7 @@ const Comment = () => {
              <button onClick={() => setFilter("Not Approved")} className={`shadow-custom-sm border rounded-full px-4 py-1 cursor-pointer text-xs ${filter === "Not Approved" ? 'text-primary' : 'text-gray-700'}`}>Not Approved</button>
         </div>
       </div>
-      <div lassName="relative h-4/5 mt-4 max-w-3xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
+      <div className="relative h-4/5 mt-4 max-w-3xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
            <table className="w-full text-sm text-gray-500">
               <thead className="text-xs text-gray-700 text-left upppercase">
                 <tr>
@@ -34,14 +47,20 @@ const Comment = () => {
               </tr>
               </thead>
               <tbody>
-                { comments.filter((comment) => {
-                  if(filter === "Approved") return comment.isApproved === true;
-                  return comment.isApproved === false
-                }).map((comment,index) => {
-                  return <>
-                  <CommenttableItem key={index} comment={comment} fetchComments={fetchComments} />
-                  </>
-                }) }
+                {comments.filter((comment) => {
+    if (filter === "Approved") {
+      return comment.isApproved === true || comment.isApproved === "true";
+    }
+    return comment.isApproved === false || comment.isApproved === "false" || !comment.isApproved;
+  })
+  .map((comment, index) => (
+    <CommenttableItem
+      key={index}
+      comment={comment}
+      fetchComments={fetchComments}
+    />
+  ))
+ }
               </tbody>
            </table>
       </div>
