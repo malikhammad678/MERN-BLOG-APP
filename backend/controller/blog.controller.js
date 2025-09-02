@@ -3,6 +3,7 @@ import imageKit from '../config/imagekit.js';
 import Blog from '../model/blog.model.js';
 import Comment from '../model/comment.model.js';
 
+
 export const addBlog = async (req, res) => {
     try {
         const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
@@ -54,19 +55,20 @@ export const getAllBlogs = async (req,res) => {
     }
 }
 
-export const getBlogById = async (req,res) => {
-    try {
-        const { id } = req.params;
-        const blog = await Blog.findOne({ _id:id })
-        if(!blog) {
-            return res.json({ success:false, message:"Blog not found!" })
-        }
-        res.json({ success:true, blog })
-    } catch (error) {
-        res.json({ success: false, message: error.message }); 
-    }
-}
+export const getBlogById = async (req, res) => {
+  try {
+    const { _id } = req.params;
 
+    const blog = await Blog.findById(_id);
+    if (!blog) {
+      return res.json({ success: false, message: "Blog not found!" });
+    }
+
+    res.json({ success: true, blog });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
 export const deleteBlogById = async (req,res) => {
     try {
         const { id } = req.body;

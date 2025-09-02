@@ -6,27 +6,61 @@ import Moment from 'moment'
 import moment from 'moment'
 import Footer from '../components/Footer'
 import Loader from '../components/Loader'
+import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 
 const Blog = () => {
 
   const { _id } = useParams()
+
+
+  const { axios } = useAppContext()
 
   const [blog,setBlog] = useState(null)
   const [comments,setComments] = useState([])
   const [name,setName] = useState('')
   const [content, setContent] = useState('')
 
-  const fetchBlog = () => {
-    const filterBlog = blog_data.find(blog => blog._id === _id)
-    setBlog(filterBlog)
+  const fetchBlog = async () => {
+    try {
+      const { data } = await axios.get(`/api/blog/${_id}`)
+      if(data.success){
+        setBlog(data.blog)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error Occured!")
+    }
   }
 
-  const fetchComments = () => {
-    setComments(comments_data)
+  const fetchComments = async () => {
+    try {
+      const { data } = await axios.post('/api/blog/comments', { id:_id })
+      if(data.success){
+        setComments(data.comments)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error Occured!")
+    }
   }
 
-  const addComment =  async () => {
-  
+  const addComment =  async (e) => {
+     try {
+      e.preventDefault()
+      const  { data } = await axios.post('/api/blog/add-comment', { blog: _id , name, content})
+      if(data.success){
+        toast.success(data.message)
+        setName('')
+        setContent('')
+      } else {
+        toast.error(data.message)
+      }
+     } catch (error) {
+      toast.error(error.response?.data?.message || "Error Occured!")
+     }
   }
   useEffect(() => {
     fetchBlog()

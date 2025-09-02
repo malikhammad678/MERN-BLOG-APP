@@ -7,10 +7,10 @@ const blogRoute = express.Router()
 
 blogRoute.post("/add", upload.single('image'), protectedRoute  ,addBlog)
 blogRoute.get("/", getAllBlogs)
-blogRoute.get("/:id", getBlogById)
+blogRoute.get("/:_id", getBlogById)
 blogRoute.post("/delete", protectedRoute, deleteBlogById)
 blogRoute.post("/toggle", protectedRoute, togglePublish)
 blogRoute.post("/add-comment", addComment)
-blogRoute.get("/comments", getCommentData)
+blogRoute.post("/comments", getCommentData)
 
 export default blogRoute;
