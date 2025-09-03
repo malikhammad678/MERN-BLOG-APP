@@ -1,5 +1,5 @@
 import express from 'express'
-import { addBlog, addComment, deleteBlogById, getAllBlogs, getBlogById, getCommentData, togglePublish } from '../controller/blog.controller.js';
+import { addBlog, addComment, deleteBlogById, generateContent, getAllBlogs, getBlogById, getCommentData, togglePublish } from '../controller/blog.controller.js';
 import upload from '../config/multer.js';
 import { protectedRoute } from '../middleware/auth.js';
 
@@ -12,5 +12,6 @@ blogRoute.post("/delete", protectedRoute, deleteBlogById)
 blogRoute.post("/toggle", protectedRoute, togglePublish)
 blogRoute.post("/add-comment", addComment)
 blogRoute.post("/comments", getCommentData)
+blogRoute.post("/generate", protectedRoute, generateContent)
 
 export default blogRoute;

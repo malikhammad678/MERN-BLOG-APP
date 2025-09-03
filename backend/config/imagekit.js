@@ -1,9 +1,9 @@
 import ImageKit from "imagekit";
 
 var imageKit = new ImageKit({
-    publicKey:'public_1z4xXCvUY+0GwgtA0siR+YVWlKo=',
-    privateKey:'private_GAfVlmr9wQwZaVZd2CpCzFP10aY=',
-    urlEndpoint:'https://ik.imagekit.io/hjp8mxdpdr'
+    publicKey:process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey:process.env.IMAGEKIT_API_PRIVATE,
+    urlEndpoint:process.env.IMAGEKIT_API_ENDPOINT
 })
 
 export default imageKit

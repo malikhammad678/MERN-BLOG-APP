@@ -2,6 +2,7 @@ import fs from 'fs'
 import imageKit from '../config/imagekit.js';
 import Blog from '../model/blog.model.js';
 import Comment from '../model/comment.model.js';
+import main from '../config/gemini.js'
 
 
 export const addBlog = async (req, res) => {
@@ -115,5 +116,15 @@ export const getCommentData = async (req,res) => {
    } catch (error) {
         res.json({ success: false, message: error.message }); 
    }
+}
+
+export const generateContent = async (req,res) => {
+    try {
+        const { prompt } = req.body;
+        const content = await main(`${prompt} Generate a blog content for this topic in simple text formate`)
+        res.json({ success:true, content })
+    } catch (error) {
+        res.json({ success: false, message: error.message }); 
+    }
 }
 
